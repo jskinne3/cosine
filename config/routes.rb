@@ -5,4 +5,7 @@ Rails.application.routes.draw do
   resources :syllabi
   resources :isbns
   resources :books
+
+  get 'api/isbns', controller: 'api', action: 'isbns'
+
 end
