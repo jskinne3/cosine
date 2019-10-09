@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Osp doc:</strong>
+  <%= @syllabus.osp_doc_id %>
+</p>
+
+<p>
+  <strong>Institution:</strong>
+  <%= @syllabus.institution %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @syllabus.year %>
+</p>
+
+<ul>
+  <% for book in @syllabus.books %>
+    <li><%= link_to book.title, book %></li>
+  <% end %>
+</ul>
+
+<%= link_to 'Edit', edit_syllabus_path(@syllabus) %> |
+<%= link_to 'Back', syllabi_path %>

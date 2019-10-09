@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Isbns</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Book</th>
+      <th>Code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @isbns.each do |isbn| %>
+      <tr>
+        <td><%= link_to isbn.book.title, isbn.book %></td>
+        <td><%= isbn.code %></td>
+        <td><%= link_to 'Show', isbn %></td>
+        <td><%= link_to 'Edit', edit_isbn_path(isbn) %></td>
+        <td><%= link_to 'Destroy', isbn, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Isbn', new_isbn_path %>

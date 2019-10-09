@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Book:</strong>
+  <%= @isbn.book %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @isbn.code %>
+</p>
+
+<%= link_to 'Edit', edit_isbn_path(@isbn) %> |
+<%= link_to 'Back', isbns_path %>

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Syllabi</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Osp doc</th>
+      <th>Institution</th>
+      <th>Year</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @syllabi.each do |syllabus| %>
+      <tr>
+        <td><%= syllabus.osp_doc_id %></td>
+        <td><%= syllabus.institution %></td>
+        <td><%= syllabus.year %></td>
+        <td><%= link_to 'Show', syllabus %></td>
+        <td><%= link_to 'Edit', edit_syllabus_path(syllabus) %></td>
+        <td><%= link_to 'Destroy', syllabus, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Syllabus', new_syllabus_path %>
