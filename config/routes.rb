@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   resources :isbns
   resources :books
 
-  get 'api/isbns', controller: 'api', action: 'isbns'
+  get 'api/coassigned', controller: 'api', action: 'coassigned'
 
 end
