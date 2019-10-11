@@ -4,7 +4,7 @@ class IsbnsController < ApplicationController
   # GET /isbns
   # GET /isbns.json
   def index
-    @isbns = Isbn.all.includes(:book)
+    @isbns = Isbn.all.includes(:book).page params[:page]
   end
 
   # GET /isbns/1

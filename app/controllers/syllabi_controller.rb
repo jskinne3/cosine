@@ -4,7 +4,7 @@ class SyllabiController < ApplicationController
   # GET /syllabi
   # GET /syllabi.json
   def index
-    @syllabi = Syllabus.all
+    @syllabi = Syllabus.all.page params[:page]
   end
 
   # GET /syllabi/1
