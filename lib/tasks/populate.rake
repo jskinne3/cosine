@@ -17,11 +17,11 @@ namespace :populate do
     Isbn.destroy_all
     Book.destroy_all
 
-    Dir.foreach('../../Desktop/osp-commercial-sample/2.0/catalog.json/') do |filename|
+    Dir.foreach('data/catalog.json/') do |filename|
       next if filename == '.' or filename == '..' or filename == '_SUCCESS' or filename == '.DS_Store'
 
       puts filename
-      file = '../../Desktop/osp-commercial-sample/2.0/catalog.json/' + filename
+      file = 'data/catalog.json/' + filename
 
       File.open(file).each do |line|
         
@@ -52,11 +52,11 @@ namespace :populate do
 
     Syllabus.destroy_all
 
-    Dir.foreach('../../Desktop/osp-commercial-sample/2.0/syllabi.json/') do |filename|
+    Dir.foreach('data/syllabi.json/') do |filename|
       next if filename == '.' or filename == '..' or filename == '_SUCCESS' or filename == '.DS_Store'
 
       puts filename
-      file = '../../Desktop/osp-commercial-sample/2.0/syllabi.json/' + filename
+      file = 'data/syllabi.json/' + filename
 
       File.open(file).each do |line|
         
@@ -79,10 +79,10 @@ namespace :populate do
   task matches: :environment do
     puts "Populating books_syllabi join table from catalog JSON files"
 
-    Dir.foreach('../../Desktop/osp-commercial-sample/2.0/matches.json/') do |filename|
+    Dir.foreach('data/matches.json/') do |filename|
       next if filename == '.' or filename == '..' or filename == '_SUCCESS' or filename == '.DS_Store'
 
-      file = '../../Desktop/osp-commercial-sample/2.0/matches.json/' + filename
+      file = 'data/matches.json/' + filename
 
       File.open(file).each do |line|
         info = JSON.parse(line)
