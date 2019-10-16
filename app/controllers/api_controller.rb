@@ -1,5 +1,4 @@
 class ApiController < ApplicationController
-    skip_before_action :check_ui_key
 
   def coassigned
     # Look up ISBNs from params
