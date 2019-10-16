@@ -1,10 +1,13 @@
 namespace :populate do
   desc "Populate the database from Open Syllabus data download"
 
-  # rake populate:test
-  task test: :environment do 
-    puts "Running the test..."
-    
+  # rake populate:enumerate
+  task enumerate: :environment do 
+    puts "Items in data directory:"
+    Dir.foreach('data') do |filename|
+      puts filename
+    end
+
   end
 
   # rake populate:catalog
@@ -61,7 +64,9 @@ namespace :populate do
         Syllabus.create(
           osp_doc_id: info['id'],
           institution: info['institution_name'],
-          year: info['year']
+          year: info['year'],
+          field: (info['field_name'].blank? ? nil : info['field_name']),
+          cip: (info['field_code'].blank? ? nil : info['field_code']),
         )
 
       end
