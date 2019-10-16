@@ -1,6 +1,12 @@
 namespace :populate do
   desc "Populate the database from Open Syllabus data download"
 
+  # rake populate:test
+  task test: :environment do 
+    puts "Running the test..."
+    
+  end
+
   # rake populate:catalog
   task catalog: :environment do
     puts "Populating books table from catalog JSON files"
