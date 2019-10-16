@@ -1,4 +1,5 @@
 class SyllabiController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_syllabus, only: [:show, :edit, :update, :destroy]
 
   # GET /syllabi

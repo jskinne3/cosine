@@ -8,4 +8,7 @@ Rails.application.routes.draw do
 
   get 'api/coassigned', controller: 'api', action: 'coassigned'
 
+  # https://github.com/plataformatec/devise/wiki/How-To:-Set-up-devise-as-a-single-user-system
+  devise_for :users, controllers: { registrations: "registrations"}
+
 end
