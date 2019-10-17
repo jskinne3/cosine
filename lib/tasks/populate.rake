@@ -65,7 +65,7 @@ namespace :populate do
 
   # rake populate:syllabi
   task syllabi: :environment do
-    puts "Populating syllabi table from catalog JSON files"
+    puts "Populating syllabi table from syllabi JSON files"
 
     Syllabus.destroy_all
     puts "Destroyed existing syllabi"
@@ -113,7 +113,7 @@ namespace :populate do
 
   # rake populate:matches
   task matches: :environment do
-    puts "Populating books_syllabi join table from catalog JSON files"
+    puts "Populating books_syllabi join table from matches JSON files"
 
     100.times do |i|
       code = i.to_s.rjust(2, "0")
@@ -140,7 +140,7 @@ namespace :populate do
           end
         rescue
           puts "======================== could not associate these records ===="
-          puts "book: " + info['work_id'] + " syllabus: " info['doc_id']
+          puts "book: " + info['work_id'] + " syllabus: " + info['doc_id']
           puts "==============================================================="
           sleep(5)
         end
