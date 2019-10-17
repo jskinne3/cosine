@@ -27,17 +27,35 @@ namespace :populate do
         
         info = JSON.parse(line)
         unless info['work_isbns'].blank? # don't worry about books missing ISBNs
-          book = Book.create(
+
+          authors = info['authors'].map{|a| "#{a['given_name']} #{a['surname']}" }.join(', ')
+
+          existing_book = Book.where(
             title: info['normalized_title'],
             osp_work_id: info['work_id'].to_i,
-            authors: info['authors'].map{|a| "#{a['given_name']} #{a['surname']}" }.join(', ')
-          )
-          for isbn in info['work_isbns'] 
-            isbn.delete!('^0-9,X') # remove suffixes from ISBNs
-            Isbn.create(
-              code: isbn,
-              book: book
-            )
+            authors: authors
+          ).first
+
+          unless existing_book
+            begin
+              book = Book.create(
+                title: info['normalized_title'],
+                osp_work_id: info['work_id'].to_i,
+                authors: authors
+              )
+              for isbn in info['work_isbns'] 
+                isbn.delete!('^0-9,X') # remove suffixes from ISBNs
+                Isbn.create(
+                  code: isbn,
+                  book: book
+                )
+              end
+            rescue
+              puts "========================= could not create this book in db ===="
+              puts info['normalized_title']
+              puts authors
+              puts "==============================================================="
+            end
           end
         end
       end
