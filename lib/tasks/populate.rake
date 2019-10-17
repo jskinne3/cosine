@@ -24,20 +24,18 @@ namespace :populate do
 
       puts file
       for line in data.split("\n")
-        
         info = JSON.parse(line)
         unless info['work_isbns'].blank? # don't worry about books missing ISBNs
+          begin
+            authors = info['authors'].map{|a| "#{a['given_name']} #{a['surname']}" }.join(', ')
 
-          authors = info['authors'].map{|a| "#{a['given_name']} #{a['surname']}" }.join(', ')
+            existing_book = Book.where(
+              title: info['normalized_title'],
+              osp_work_id: info['work_id'].to_i,
+              authors: authors
+            ).first
 
-          existing_book = Book.where(
-            title: info['normalized_title'],
-            osp_work_id: info['work_id'].to_i,
-            authors: authors
-          ).first
-
-          unless existing_book
-            begin
+            unless existing_book
               book = Book.create(
                 title: info['normalized_title'],
                 osp_work_id: info['work_id'].to_i,
@@ -50,12 +48,13 @@ namespace :populate do
                   book: book
                 )
               end
-            rescue
-              puts "========================= could not create this book in db ===="
-              puts info['normalized_title']
-              puts authors
-              puts "==============================================================="
             end
+          rescue
+            puts "========================= could not create this book in db ===="
+            puts info['normalized_title']
+            puts authors
+            puts "==============================================================="
+            sleep(5)
           end
         end
       end
@@ -80,13 +79,31 @@ namespace :populate do
       for line in data.split("\n")
         
         info = JSON.parse(line)
-        Syllabus.create(
-          osp_doc_id: info['id'],
-          institution: info['institution_name'],
-          year: info['year'],
-          field: (info['field_name'].blank? ? nil : info['field_name']),
-          cip: (info['field_code'].blank? ? nil : info['field_code']),
-        )
+
+        begin
+          existing_syllabus = Syllabus.create(
+            osp_doc_id: info['id'],
+            institution: info['institution_name'],
+            year: info['year'],
+            field: (info['field_name'].blank? ? nil : info['field_name']),
+            cip: (info['field_code'].blank? ? nil : info['field_code']),
+          )
+          unless existing_syllabus
+            Syllabus.create(
+              osp_doc_id: info['id'],
+              institution: info['institution_name'],
+              year: info['year'],
+              field: (info['field_name'].blank? ? nil : info['field_name']),
+              cip: (info['field_code'].blank? ? nil : info['field_code']),
+            )
+          end
+        rescue
+          puts "===================== could not create this syllabus in db ===="
+          puts info['institution_name'] + info['year']
+          puts info['field_name']
+          puts "==============================================================="
+          sleep(5)
+        end
 
       end
 
@@ -108,16 +125,24 @@ namespace :populate do
 
         info = JSON.parse(line)
 
-        # Find the book referred to in the match
-        book = Book.where(osp_work_id: info['work_id'].to_i).first
+        begin
 
-        # Find the syllabus referred to in the match
-        syllabus = Syllabus.where(osp_doc_id: info['doc_id'].to_i).first
+          # Find the book referred to in the match
+          book = Book.where(osp_work_id: info['work_id'].to_i).first
 
-        # Associate them, if they were found
-        if book && syllabus
-          #puts "#{book.title} --- #{syllabus.institution} #{syllabus.year}"
-          syllabus.books << book
+          # Find the syllabus referred to in the match
+          syllabus = Syllabus.where(osp_doc_id: info['doc_id'].to_i).first
+
+          # Associate them, if they were found
+          if book && syllabus
+            #puts "#{book.title} --- #{syllabus.institution} #{syllabus.year}"
+            syllabus.books << book
+          end
+        rescue
+          puts "======================== could not associate these records ===="
+          puts "book: " + info['work_id'] + " syllabus: " info['doc_id']
+          puts "==============================================================="
+          sleep(5)
         end
 
       end
