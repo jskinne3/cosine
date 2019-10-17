@@ -1,13 +1,11 @@
 namespace :populate do
   desc "Populate the database from Open Syllabus data download"
 
-  # rake populate:enumerate
-  task enumerate: :environment do 
-    puts "Items in data directory:"
-    Dir.foreach('data') do |filename|
-      puts filename
-    end
-
+  # rake populate:test
+  task test: :environment do
+    puts "Testing the ability to open files..."
+    file = open('http://johnskinnerportfolio.com/resources/catalog.json/part-00084-4453d4a9-ee1a-433f-8e83-e03ab3824834-c000.json') {|f| f.read }
+    puts file.inspect
   end
 
   # rake populate:catalog
@@ -15,15 +13,17 @@ namespace :populate do
     puts "Populating books table from catalog JSON files"
 
     Isbn.destroy_all
+    puts "Destroyed existing ISBNs"
     Book.destroy_all
+    puts "Destroyed existing Books"
 
-    Dir.foreach('data/catalog.json/') do |filename|
-      next if filename == '.' or filename == '..' or filename == '_SUCCESS' or filename == '.DS_Store'
+    100.times do |i|
+      code = i.to_s.rjust(2, "0")
+      file = "http://johnskinnerportfolio.com/resources/catalog.json/part-000#{code}-4453d4a9-ee1a-433f-8e83-e03ab3824834-c000.json"
+      data = open( file ) {|f| f.read }
 
-      puts filename
-      file = 'data/catalog.json/' + filename
-
-      File.open(file).each do |line|
+      puts file
+      for line in data.split("\n")
         
         info = JSON.parse(line)
         unless info['work_isbns'].blank? # don't worry about books missing ISBNs
@@ -51,14 +51,15 @@ namespace :populate do
     puts "Populating syllabi table from catalog JSON files"
 
     Syllabus.destroy_all
+    puts "Destroyed existing syllabi"
 
-    Dir.foreach('data/syllabi.json/') do |filename|
-      next if filename == '.' or filename == '..' or filename == '_SUCCESS' or filename == '.DS_Store'
+    100.times do |i|
+      code = i.to_s.rjust(2, "0")
+      file = "http://johnskinnerportfolio.com/resources/syllabi.json/part-000#{code}-9456a5fd-da80-4b27-95e4-581d97c077a9-c000.json"
+      data = open( file ) {|f| f.read }
 
-      puts filename
-      file = 'data/syllabi.json/' + filename
-
-      File.open(file).each do |line|
+      puts file
+      for line in data.split("\n")
         
         info = JSON.parse(line)
         Syllabus.create(
@@ -79,12 +80,14 @@ namespace :populate do
   task matches: :environment do
     puts "Populating books_syllabi join table from catalog JSON files"
 
-    Dir.foreach('data/matches.json/') do |filename|
-      next if filename == '.' or filename == '..' or filename == '_SUCCESS' or filename == '.DS_Store'
+    100.times do |i|
+      code = i.to_s.rjust(2, "0")
+      file = "http://johnskinnerportfolio.com/resources/matches.json/part-000#{code}-ce174801-e480-496b-8f50-448b41e8bedd-c000.json"
+      data = open( file ) {|f| f.read }
 
-      file = 'data/matches.json/' + filename
+      puts file
+      for line in data.split("\n")
 
-      File.open(file).each do |line|
         info = JSON.parse(line)
 
         # Find the book referred to in the match
@@ -95,7 +98,7 @@ namespace :populate do
 
         # Associate them, if they were found
         if book && syllabus
-          puts "#{book.title} --- #{syllabus.institution} #{syllabus.year}"
+          #puts "#{book.title} --- #{syllabus.institution} #{syllabus.year}"
           syllabus.books << book
         end
 
