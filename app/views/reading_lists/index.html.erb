@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Syllabi</h1>
+
+<%= paginate @syllabi %>
+
+<% @syllabi.each do |syllabus| %>
+  <div>
+    <h4><%= link_to "#{syllabus.institution} #{syllabus.field} #{syllabus.year}", syllabus %></h4>
+    <ul>
+      <% for book in syllabus.books %>
+        <li><%= link_to book.title, book %></li>
+      <% end %>
+    </ul>
+  </tr>
+<% end %>
