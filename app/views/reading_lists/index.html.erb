@@ -6,10 +6,13 @@
 
 <% @syllabi.each do |syllabus| %>
   <div>
-    <h4><%= link_to "#{syllabus.institution} #{syllabus.field} #{syllabus.year}", syllabus %></h4>
+    <h4><%= link_to syllabus.title, syllabus %></h4>
     <ul>
       <% for book in syllabus.books %>
-        <li><%= link_to book.title, book %></li>
+        <li>
+        	<%= link_to book.title, book %>
+          (<%= link_to 'Coassigned', action: 'coassigned', id: book.id %>)
+        </li>
       <% end %>
     </ul>
   </tr>

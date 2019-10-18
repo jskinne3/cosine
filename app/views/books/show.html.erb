@@ -20,5 +20,6 @@
   <%= @book.isbns.map(&:code).join(', ') %>
 </p>
 
+<%= link_to 'Coassigned', controller: 'reading_lists', action: 'coassigned', id: @book.id %> |
 <%= link_to 'Edit', edit_book_path(@book) %> |
 <%= link_to 'Back', books_path %>

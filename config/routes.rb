@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'api/coassigned', controller: 'api', action: 'coassigned'
 
   get '/reading_lists', controller: 'reading_lists', action: 'index'
+  get 'reading_lists/coassigned', controller: 'reading_lists', action: 'coassigned'
 
   # https://github.com/plataformatec/devise/wiki/How-To:-Set-up-devise-as-a-single-user-system
   devise_for :users, controllers: { registrations: "registrations"}

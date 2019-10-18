@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @book.title %></h1>
+
+<h3>Syllabi</h3>
+<ul>
+  <% for syllabus in @book.syllabi %>
+    <li><%= syllabus.title %></li>
+  <% end %>
+</ul>
+
+<h3>Coassigned</h3>
+<ul>
+  <% for book in @coassigned %>
+    <li>
+      <%= link_to book.title, book %>
+      (<%= link_to 'Coassigned', action: 'coassigned', id: book.id %>)
+    </li>
+  <% end %>
+</ul>
+
