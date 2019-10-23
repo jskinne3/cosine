@@ -9,6 +9,8 @@ gem 'rails', '~> 5.2.3'
 #gem 'sqlite3'
 # No, hows about lets use PostgresQL
 gem 'pg'
+# Address blocking by CORS policy
+gem 'rack-cors'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
