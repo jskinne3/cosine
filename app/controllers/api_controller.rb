@@ -11,20 +11,20 @@ class ApiController < ApplicationController
     reading_list = syllabi.map{|s| s.books}.flatten
     # Subtract books the user queried with
     new_books = reading_list - books
-    # Find ISBN of the resultant books, grouped by book
-    new_isbns = new_books.map{|book| book.isbns.map(&:code)}
 
-    # Sort the ISBNs by freqency of co-assignmens
+    # Sort the books by freqency of co-assignmens
 
-    # create a hash with keys of the items and count values
-    frequency = new_isbns.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+    # create a hash with (unique) keys of the items and count values
+    frequency = new_books.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
     # sort the hash by length of values
     sort_hash = Hash[frequency.sort_by {|k,v| v}]
     # get the keys only, in reverse order
-    isbn_keys = sort_hash.keys.reverse
+    book_keys = sort_hash.keys.reverse
 
-    render plain: isbn_keys
+    # Find ISBN of the resultant books, grouped by book
+    new_isbns = book_keys.map{|book| book.isbns.map(&:code)}
 
+    render plain: new_isbns.to_json
   end
 
 end
