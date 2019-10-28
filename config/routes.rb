@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :books
 
   get 'api/coassigned', controller: 'api', action: 'coassigned'
+  get 'api/cips', controller: 'api', action: 'cips'
 
   get '/reading_lists', controller: 'reading_lists', action: 'index'
   get 'reading_lists/coassigned', controller: 'reading_lists', action: 'coassigned'

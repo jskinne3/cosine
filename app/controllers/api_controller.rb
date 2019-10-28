@@ -27,4 +27,9 @@ class ApiController < ApplicationController
     render plain: new_isbns.to_json
   end
 
+  def cips
+    cips = Syllabus.distinct.pluck(:cip, :field)
+    render plain: cips.to_json
+  end
+
 end
