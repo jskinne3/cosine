@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<h1>CIPs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field name</th>
+      <th>CIP codes</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cips.each do |cip| %>
+      <tr>
+        <td><%= cip[0] %></td>
+        <td><%= link_to cip[1], action: :field, cip: cip[1], field: cip[0] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
