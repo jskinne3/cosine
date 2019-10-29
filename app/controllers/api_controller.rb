@@ -32,4 +32,12 @@ class ApiController < ApplicationController
     render plain: cips.to_json
   end
 
+  def field
+    (render plain: []; return) unless params[:cip]
+    syllabus_ids = Syllabus.where(cip: params[:cip]).pluck(:id)
+    books = Book.includes(:syllabi).where(syllabi: {id: syllabus_ids})
+    # TODO: sort the books by number of syllabi in which they appear, output ISBNs
+    render plain: books.map{|b| b.title}
+  end
+
 end

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # API routes
   get 'api/coassigned', controller: 'api', action: 'coassigned'
   get 'api/cips', controller: 'api', action: 'cips'
+  get 'api/field', controller: 'api', action: 'field'
 
   # Custom views
   get '/reading_lists', controller: 'reading_lists', action: 'index'
