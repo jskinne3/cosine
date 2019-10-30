@@ -29,7 +29,8 @@ class ApiController < ApplicationController
 
   def cips
     cips = Syllabus.distinct.pluck(:cip, :field).reject{|e| e[0].nil?}
-    render plain: cips.to_json
+    json = cips.map{|e| {cip: e[0], field: e[1]}}.to_json
+    render plain: json
   end
 
   def field
