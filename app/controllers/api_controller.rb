@@ -33,11 +33,18 @@ class ApiController < ApplicationController
   end
 
   def field
+    # Supress nil CIP results
     (render plain: []; return) unless params[:cip]
+    # Get ids for all the syllabi within the field, designated by CIP code
     syllabus_ids = Syllabus.where(cip: params[:cip]).pluck(:id)
-    books = Book.includes(:syllabi).where(syllabi: {id: syllabus_ids})
-    # TODO: sort the books by number of syllabi in which they appear, output ISBNs
-    render plain: books.map{|b| b.title}
+    # Get all the books assigned by those syllabi
+    books = Book.includes(:syllabi, :isbns).where(syllabi: {id: syllabus_ids})
+    # Create book data structure to output
+    books_hashes = books.map{|b| {title: b.title, isbns: b.isbns.map{|i|i.code}, syllabi: b.syllabi.length}}
+    # Sort the output structure
+    books_hashes.sort!{|a,b| b[:syllabi] <=> a[:syllabi]}
+    
+    render plain: books_hashes.to_json
   end
 
 end
